@@ -27,9 +27,8 @@ def vi():
         for link in links:
             if 'vseinstrumenti.ru' in link:
                 html = html_obj(link)
-                export_excel(for_vi(html), quantity_iter)
+                export_excel(for_vi(html), 2, quantity_iter)
                 quantity_iter += 1
-
 
     return specifications
 
