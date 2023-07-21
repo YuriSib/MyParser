@@ -2,15 +2,15 @@ import openpyxl
 
 
 def export_excel(values_list, column, row):
-    workbook = openpyxl.load_workbook('Шаблон для парсера(Биты, адаптеры, торцевые головки).xlsx')
+    workbook = openpyxl.load_workbook('Стеклорезы.xlsx')
     sheet = workbook.active
     combined_values = ', '.join(values_list)
     sheet[row][column].value = combined_values   #sheet[строка][колонка].value
-    workbook.save('Шаблон для парсера(Биты, адаптеры, торцевые головки).xlsx')
+    workbook.save('Стеклорезы.xlsx')
 
 
 def quantity_row():
-    workbook = openpyxl.open('Шаблон для парсера(Биты, адаптеры, торцевые головки).xlsx', read_only=True)
+    workbook = openpyxl.open('Стеклорезы.xlsx', read_only=True)
     sheet = workbook.active
 
     return sheet.max_row + 1
