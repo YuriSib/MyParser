@@ -45,27 +45,24 @@ def vi(link):
 
 
 def main():
-    # count = 1
-    # for i in range(0, quantity_row()):
-    #     first = 'https://www.google.com/search?q=' if count % 2 == 1 else 'https://yandex.ru/search/?'
-    #     # count += 1
-    #     requests = list_of_requests()
-    #     for request in requests:
-    #         link = search(first, request, count)
-    #         specifications, list_photo = vi(link)
-    #         export_excel(specifications, 2, count)
-    #         export_excel(list_photo, 3, count)
-    count = 2
     requests = list_of_requests()
     for request in requests:
-        first = 'https://www.google.com/search?q=' if count % 2 == 1 else 'https://yandex.ru/search/?'
+        first = f'http://xmlproxy.ru/search/xml?{request}user=itproj31%40gmail.com&key=aaaa12bc9d966caf7c4b66fc4fd0ac46'
         link = search(first, request, count)
         specifications, list_photo = vi(link)
         export_excel(specifications, 2, count)
         export_excel(list_photo, 3, count)
-        count += 1
-
-    return f'{count} строк, успешно закружено в таблицу'
+    # count = 2
+    # requests = list_of_requests()
+    # for request in requests:
+    #     first = 'https://www.google.com/search?q=' if count % 2 == 1 else 'https://yandex.ru/search/?'
+    #     link = search(first, request, count)
+    #     specifications, list_photo = vi(link)
+    #     export_excel(specifications, 2, count)
+    #     export_excel(list_photo, 3, count)
+    #     count += 1
+    #
+    # return f'{count} строк, успешно закружено в таблицу'
 
 
 search_list = main()

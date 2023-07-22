@@ -1,7 +1,5 @@
 from bs4 import BeautifulSoup
 
-from html_master import html_obj
-
 
 def for_ya_search(html):
     soup = BeautifulSoup(html, 'lxml')

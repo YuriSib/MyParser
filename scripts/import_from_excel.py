@@ -11,9 +11,9 @@ def import_xl():
         name = sheet[row][0].value
         article = sheet[row][1].value if sheet[row][1].value is not None else None
         if article is None:
-            search_query = name
+            search_query = name + ' host:www.vseinstrumenti.ru'
         else:
-            search_query = name + ' ' + article
+            search_query = name + ' ' + article + ' host:www.vseinstrumenti.ru'
         list_category.append(search_query)
 
     return list_category
