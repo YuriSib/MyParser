@@ -2,26 +2,31 @@ from bs4 import BeautifulSoup
 
 from html_master import html_obj
 
+
 def for_ya_search(html):
     soup = BeautifulSoup(html, 'lxml')
-    link_list = []
+    link = ''
     blocks = soup.find_all('div', class_='Organic') #.find('a', class_='link')
     for block in blocks:
-        link = block.find('a', class_='link').get('href')
-        if 'vseinstrumenti.ru' in link or 'market.yandex.ru' in link:
-            link_list.append(link)
-    return link_list
+        if 'vseinstrumenti.ru' in block.text:
+            link = block.text
+        # if 'vseinstrumenti.ru' in block.text or 'market.yandex.ru' in block.text:
+        #     link_list.append(block.find('a')['href'])
+
+    return link
 
 
 def for_goo_search(html):
     soup = BeautifulSoup(html, 'lxml')
-    link_list = []
+    link = ''
     blocks = soup.find_all('div', class_='yuRUbf')# .find('a', class_='link')
     for block in blocks:
-        if 'vseinstrumenti.ru' in block.text or 'market.yandex.ru' in block.text:
-            link_list.append(block.find('a')['href'])
+        if 'vseinstrumenti.ru' in block.text:
+            link = block.text
+        # if 'vseinstrumenti.ru' in block.text or 'market.yandex.ru' in block.text:
+        #     link_list.append(block.find('a')['href'])
 
-    return link_list
+    return link
 
 
 def for_vi(html):

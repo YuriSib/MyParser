@@ -7,7 +7,7 @@ def import_xl():
     list_category = []
 
     #sheet.max_row + 1 в range - для вывода всего ряда
-    for row in range(2, sheet.max_row + 1):
+    for row in range(2, 8):
         name = sheet[row][0].value
         article = sheet[row][1].value if sheet[row][1].value is not None else None
         if article is None:

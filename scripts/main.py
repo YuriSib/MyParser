@@ -6,35 +6,68 @@ from export_in_excel import export_excel, quantity_row
 
 # def pars_in_vi():
 
-def search():
-    link_list = []
-    first = 'https://www.google.com/search?q='
-    # first = 'https://yandex.ru/search/?'
-    second_list = list_of_requests()
-    for second in second_list:
-        html = html_obj(first, second)
-        links = for_goo_search(html)
-        link_list.append(links)
+def search(first, second, int_):
+    html = html_obj(first, second)
+    link = for_goo_search(html) if int_ % 2 == 1 else for_ya_search(html)
 
-    return link_list
-
-
-def vi():
-    links_list = search()
-    specifications = []
-    quantity_iter = 2
-    for row in range(2, quantity_row()):
-        for links in links_list:
-            for link in links:
-                if 'vseinstrumenti.ru' in link:
-                    html = html_obj(link)
-                    export_excel(for_vi(html), 2, quantity_iter)
-                    export_excel(vi_photo(html), 3, quantity_iter)
-                    quantity_iter += 1
-
-    return specifications
+    return link
+    # link_list = []
+    # # first = 'https://www.google.com/search?q='
+    # # first = 'https://yandex.ru/search/?'
+    # second_list = list_of_requests()
+    # for second in second_list:
+    #     html = html_obj(first, second)
+    #     links = for_goo_search(html)
+    #     link_list.append(links)
+    #
+    # return link_list
 
 
-search_list = vi()
+def vi(link):
+    html = html_obj(link)
+    specifications = for_vi(html)
+    list_photo = vi_photo(html)
+
+    return specifications, list_photo
+    # links_list = search()
+    # specifications = []
+    # quantity_iter = 2
+    # for row in range(2, quantity_row()):
+    #     for links in links_list:
+    #         for link in links:
+    #             if 'vseinstrumenti.ru' in link:
+    #                 html = html_obj(link)
+    #                 export_excel(for_vi(html), 2, quantity_iter)
+    #                 export_excel(vi_photo(html), 3, quantity_iter)
+    #                 quantity_iter += 1
+    #
+    # return specifications
+
+
+def main():
+    # count = 1
+    # for i in range(0, quantity_row()):
+    #     first = 'https://www.google.com/search?q=' if count % 2 == 1 else 'https://yandex.ru/search/?'
+    #     # count += 1
+    #     requests = list_of_requests()
+    #     for request in requests:
+    #         link = search(first, request, count)
+    #         specifications, list_photo = vi(link)
+    #         export_excel(specifications, 2, count)
+    #         export_excel(list_photo, 3, count)
+    count = 2
+    requests = list_of_requests()
+    for request in requests:
+        first = 'https://www.google.com/search?q=' if count % 2 == 1 else 'https://yandex.ru/search/?'
+        link = search(first, request, count)
+        specifications, list_photo = vi(link)
+        export_excel(specifications, 2, count)
+        export_excel(list_photo, 3, count)
+        count += 1
+
+    return f'{count} строк, успешно закружено в таблицу'
+
+
+search_list = main()
 
 print(search_list)
