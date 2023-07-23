@@ -24,7 +24,7 @@ def html_obj(first, second=None):
                 fix_hairline=True,
                 )
         url = f'{first}{second}' if second is not None else f'{first}'
-        driver.get(url)
+        driver.get(url=url)
         html = driver.page_source
 
         return html

@@ -1,16 +1,16 @@
 import openpyxl
 
 
-def export_excel(values_list, column, row):
-    workbook = openpyxl.load_workbook('Стеклорезы.xlsx')
+def export_excel(table, values_list, column, row):
+    workbook = openpyxl.load_workbook(table)
     sheet = workbook.active
     combined_values = ', '.join(values_list)
     sheet[row][column].value = combined_values   #sheet[строка][колонка].value
-    workbook.save('Стеклорезы.xlsx')
+    workbook.save(table)
 
 
-def quantity_row():
-    workbook = openpyxl.open('Стеклорезы.xlsx', read_only=True)
+def quantity_row(table):
+    workbook = openpyxl.open(table, read_only=True)
     sheet = workbook.active
 
     return sheet.max_row + 1
