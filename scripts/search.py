@@ -1,6 +1,9 @@
 import requests
 from bs4 import BeautifulSoup
 
+from import_from_excel import import_xl
+from ya_search import list_of_requests
+
 
 def search_xml(qwery):
     url = f'http://xmlproxy.ru/search/xml?query={qwery}&groupby=attr%3Dd.mode%3Ddeep.groups-on-page%3D5.' \
@@ -8,17 +11,27 @@ def search_xml(qwery):
     response = requests.get(url)
     dirty_list_link = BeautifulSoup(response.text, features="xml").find_all('url')
     list_link = [link.text.strip('</url>') for link in dirty_list_link]
-    link = []
+    link_vi = []
+    link_ym = []
     for lnk in list_link:
-        if 'www.vseinstrumenti.ru/product' in lnk and 'otzyvy' not in lnk:
-            link.append(lnk)
-    if len(link) == 1:
-        link = ''.join(link)
+        if 'vseinstrumenti.ru/product' in lnk and 'otzyvy' not in lnk:
+            if len(link_vi) == 0:
+                link_vi.append(lnk)
+                link_vi = ''.join(link_vi)
+        elif 'market.yandex.ru/product--' in lnk:
+            if len(link_ym) == 0:
+                link_ym.append(lnk)
+                link_ym = ''.join(link_ym)
 
-    return link
+    return link_vi, link_ym
 
 
-# qwery = '%D0%A1%D1%82%D0%B5%D0%BA%D0%BB%D0%BE%D1%80%D0%B5%D0%B7%201-%D1%80%D0%BE%D0%BB%D0%B8%D0%BA%D0%BE%D0%B2%D1%8' \
-#         'B%D0%B9%20STARTUL%20PROFI%20ST4960-01'
-# test = search_xml(qwery)
-# print(test)
+# table = 'Биты, адаптеры.xlsx'
+# qwery = import_xl(table, 37, 38)
+# code_qwery = list_of_requests(qwery)
+#
+# test1, test2 = search_xml(code_qwery)
+# print(qwery)
+# print(test1, test2)
+
+

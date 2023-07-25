@@ -1,5 +1,9 @@
 from bs4 import BeautifulSoup
 
+# from html_master import html_obj
+# from import_from_excel import import_xl
+# from ya_search import list_of_requests
+# from search import search_xml
 
 # def for_ya_search(html):
 #     soup = BeautifulSoup(html, 'lxml')
@@ -67,17 +71,32 @@ def vi_photo(html):
     return photo_list
 
 
-def for_ya_m():
-    pass
-
-
-# html1 = html_obj('https://www.google.com/search?q=%D0%90%D0%B4%D0%B0%D0%BF%D1%82%D0%B5%D1%80+STAYER+%D0%B3%D0%B8%D0%'
-#                  'B1%D0%BA%D0%B8%D0%B9%2C+400%D0%BC%D0%BC+25512-40&hl=Ru&sxsrf=AB5stBjC2iRUFCnjB93GmH-IBBlK6Ln0yA%3A1'
-#                  '689947159093&ei=F4y6ZPejBYfBgAb95504&ved=0ahUKEwi3i-3g95-AAxWHIMAKHf1zBwcQ4dUDCA8&oq=%D0%90%D0%B4%D'
-#                  '0%B0%D0%BF%D1%82%D0%B5%D1%80+STAYER+%D0%B3%D0%B8%D0%B1%D0%BA%D0%B8%D0%B9%2C+400%D0%BC%D0%BC+25512-4'
-#                  '0&gs_lp=Egxnd3Mtd2l6LXNlcnAiNNCQ0LTQsNC_0YLQtdGAIFNUQVlFUiDQs9C40LHQutC40LksIDQwMNC80LwgMjU1MTItNDA'
-#                  'yBRAhGKABMgUQIRigATIFECEYoAFI5ihQAFjnJnAAeACQAQCYAfgCoAGmBqoBBTItMi4xuAEMyAEA-AEC-AEB4gMEGAAgQYgGAQ&'
-#                  'sclient=gws-wiz-serp')
+# def for_ya_m(table):
+#     specifications = []
+#     qwery_list = list_of_requests(import_xl(table))
+#     for qwery in qwery_list:
+#         vi, ym = search_xml(qwery)
+#         html = html_obj(ym)
+#         soup = BeautifulSoup(html, 'lxml')
+#         div_element_name_1 = soup.find('div', class_='_1AayP')
+#         specifications.append(div_element_name_1.get_text(strip=True))
 #
-# test = for_goo_search(html1)
+#     return specifications
+#
+#
+# def ya_m_photo(table):
+#     photo_list = []
+#     qwery_list = list_of_requests(import_xl(table))
+#     for qwery in qwery_list:
+#         vi, ym = search_xml(qwery)
+#         html = html_obj(ym)
+#         soup = BeautifulSoup(html, 'lxml')
+#         div_element_name_1 = soup.find('div', class_='_3Wp6V')
+#         photo_list.append(div_element_name_1)
+#
+#     return photo_list
+#
+#
+# table_ = 'Стеклорезы.xlsx'
+# test = for_ya_m(table_)
 # print(test)
