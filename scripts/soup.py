@@ -47,7 +47,7 @@ def for_vi(html):
         span_element_value = row.find('span')
         list_value.append(span_element_value.get_text(strip=True))
 
-    block = [f'{x} : {y}' for x, y in zip(list_name, list_value)]
+    block = [f'• {x} : {y} \n' for x, y in zip(list_name, list_value)]
 
     return block
 
