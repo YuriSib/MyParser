@@ -26,8 +26,8 @@ def search_xml(qwery):
     return link_vi, link_ym
 
 
-# table = 'Биты, адаптеры.xlsx'
-# qwery = import_xl(table, 37, 38)
+# table = 'Ключи.xlsx'
+# qwery = import_xl(table, 5, 6)
 # code_qwery = list_of_requests(qwery)
 #
 # test1, test2 = search_xml(code_qwery)

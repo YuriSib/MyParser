@@ -39,15 +39,19 @@ def main(table, start, finish):
     return 'Программа выполнена успешно!'
 
 
-path_in_table = 'Биты, адаптеры.xlsx'
+path_in_table = 'Ключи.xlsx'
 
-start_ = 364
-for i in range(1):
+start_ = 150
+for i in range(50):
     try:
         test = main(path_in_table, start_, start_ + 1)
         start_ += 1
     except SessionNotCreatedException:
         print(f'Ошибка создания сессии WebDriver на {start_}-й строчке!')
+        test = main(path_in_table, start_, start_ + 1)
+        start_ += 1
+    except Exception:
+        print(f'Неизвестная ошибка!')
         test = main(path_in_table, start_, start_ + 1)
         start_ += 1
 
