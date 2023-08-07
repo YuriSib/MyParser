@@ -1,32 +1,27 @@
-from openpyxl import load_workbook, Workbook
-
-workbook = load_workbook('test.xlsx')
-sheet = workbook.active
-
-list_types = []
-for column_cells in sheet.iter_rows(min_col=1, min_row=2, values_only=True):
-    list_types.append(column_cells)
+import openpyxl
 
 
-sorted_list = sorted(list_types, key=lambda x: x[2])
-print(sorted_list)
+def sort_excel_by_second_column(table_path):
+    workbook = openpyxl.load_workbook(table_path)
+    sheet = workbook.active
+    data = sheet.iter_rows(values_only=True)
 
-sorted_workbook = Workbook()
-sheet_ = sorted_workbook.active
+    sorted_data = sorted(data, key=lambda x: x[2] if x[2] is not None else '')  # Сортировка по второй колонке
 
-headers = ['Товар', 'Описание', 'Тип']
-sheet_.append(headers)
+    new_rows = []
+    for row in sorted_data:
+        new_rows.append(row)
 
-for row in sorted_list:
-    sheet.append(row)
+    # Очищаем старую таблицу от данных
+    sheet.delete_rows(1, sheet.max_row)
 
-workbook.save('test2.xlsx')
+    # Записываем отсортированные данные в старую таблицу
+    for row_idx, row in enumerate(new_rows, start=1):
+        for col_idx, value in enumerate(row, start=1):
+            sheet.cell(row=row_idx, column=col_idx, value=value)
 
-
-
-
-
-
-
+    workbook.save(table_path)
 
 
+file_path = 'Щетки, наждаки, напильники.xlsx'  # Укажите путь к вашему Excel файлу
+sort_excel_by_second_column(file_path)

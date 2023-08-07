@@ -7,6 +7,7 @@ from search import search_xml
 from html_master import html_obj
 from soup import for_vi, vi_photo
 from export_in_excel import export_excel, quantity_row
+import time
 
 
 def main(table, start, finish):
@@ -39,13 +40,14 @@ def main(table, start, finish):
     return 'Программа выполнена успешно!'
 
 
-path_in_table = 'Ключи.xlsx'
+path_in_table = 'Щетки, наждаки, напильники.xlsx'
 
-start_ = 150
-for i in range(50):
+start_ = 168
+for i in range(250):
     try:
         test = main(path_in_table, start_, start_ + 1)
         start_ += 1
+        print(start_)
     except SessionNotCreatedException:
         print(f'Ошибка создания сессии WebDriver на {start_}-й строчке!')
         test = main(path_in_table, start_, start_ + 1)
