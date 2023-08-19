@@ -1,35 +1,5 @@
 from bs4 import BeautifulSoup
 
-# from html_master import html_obj
-# from import_from_excel import import_xl
-# from ya_search import list_of_requests
-# from search import search_xml
-
-# def for_ya_search(html):
-#     soup = BeautifulSoup(html, 'lxml')
-#     link = ''
-#     blocks = soup.find_all('div', class_='Organic') #.find('a', class_='link')
-#     for block in blocks:
-#         if 'vseinstrumenti.ru' in block.text:
-#             link = block.text
-#         # if 'vseinstrumenti.ru' in block.text or 'market.yandex.ru' in block.text:
-#         #     link_list.append(block.find('a')['href'])
-#
-#     return link
-#
-#
-# def for_goo_search(html):
-#     soup = BeautifulSoup(html, 'lxml')
-#     link = ''
-#     blocks = soup.find_all('div', class_='yuRUbf')# .find('a', class_='link')
-#     for block in blocks:
-#         if 'vseinstrumenti.ru' in block.text:
-#             link = block.text
-#         # if 'vseinstrumenti.ru' in block.text or 'market.yandex.ru' in block.text:
-#         #     link_list.append(block.find('a')['href'])
-#
-#     return link
-
 
 def for_vi(html):
     soup = BeautifulSoup(html, 'lxml')
@@ -71,32 +41,44 @@ def vi_photo(html):
     return photo_list
 
 
-# def for_ya_m(table):
-#     specifications = []
-#     qwery_list = list_of_requests(import_xl(table))
-#     for qwery in qwery_list:
-#         vi, ym = search_xml(qwery)
-#         html = html_obj(ym)
-#         soup = BeautifulSoup(html, 'lxml')
-#         div_element_name_1 = soup.find('div', class_='_1AayP')
-#         specifications.append(div_element_name_1.get_text(strip=True))
-#
-#     return specifications
-#
-#
-# def ya_m_photo(table):
-#     photo_list = []
-#     qwery_list = list_of_requests(import_xl(table))
-#     for qwery in qwery_list:
-#         vi, ym = search_xml(qwery)
-#         html = html_obj(ym)
-#         soup = BeautifulSoup(html, 'lxml')
-#         div_element_name_1 = soup.find('div', class_='_3Wp6V')
-#         photo_list.append(div_element_name_1)
-#
-#     return photo_list
-#
-#
-# table_ = 'Стеклорезы.xlsx'
-# test = for_ya_m(table_)
-# print(test)
+def for_po(html):
+    soup = BeautifulSoup(html, 'lxml')
+    descriptions = soup.find('div', {'itemprop': 'description'}).find_all('li')
+    block = []
+    for description in descriptions:
+        block.append(('• ' + description.get_text(strip=True) + '\n'))
+
+    return block
+
+
+def po_photo(html):
+    soup = BeautifulSoup(html, 'lxml')
+    link = soup.find('div', class_='col-12 col-md-7 col-lg-5 col-xl-5 product-image').find('img')['src']
+
+    return 'https:' + link
+
+
+def for_ku(html):
+    soup = BeautifulSoup(html, 'lxml')
+    descriptions = soup.find('div', class_='product-specs__table').find_all('tr')
+    block = []
+    for description in descriptions:
+        text_list = description.find_all('td')
+        all_td = []
+        count = 0
+        for text in text_list:
+            if count == 0:
+                all_td.append('• ' + text)
+            else:
+                all_td.append((' : ' + text + '\n'))
+        block.extend(all_td)
+
+    return block
+
+
+def ku_photo(html):
+    soup = BeautifulSoup(html, 'lxml')
+    link = soup.find('div', class_='product-gallery__slider-item '
+                                   'swiper-slide swiper-slide-visible swiper-slide-active').find('img')['src']
+
+    return link

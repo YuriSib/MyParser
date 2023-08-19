@@ -1,57 +1,52 @@
-from selenium import webdriver
-from selenium.common.exceptions import SessionNotCreatedException
+import requests
 
 from import_from_excel import import_xl
 from ya_search import list_of_requests
 from search import search_xml
 from html_master import html_obj
-from soup import for_vi, vi_photo
+from soup import for_vi, vi_photo, for_po, po_photo, for_ku, ku_photo
 from export_in_excel import export_excel, quantity_row
-import time
 
 
 def main(table, start, finish):
-    qwery_list = list_of_requests(import_xl(table, start, finish))
-    link_list = []
-    for qwery in qwery_list:
-        vi, ym = search_xml(qwery)
-        link_list.append(vi)
+    qwery = list_of_requests(import_xl(table, start, finish))
 
-    list_html = []
+    link_vi, link_ku, link_po = search_xml(qwery)
     counter = start
-    for link in link_list:
-        if link != []:
-            html = html_obj(link)
-            list_html.append(html)
-        else:
-            html = 0
-            list_html.append(0)
-
-        if html != 0:
-            specifications = for_vi(html)
-            export_excel(table, specifications, 2, counter)
-            photos = vi_photo(html)
-            export_excel(table, photos, 3, counter)
-        else:
-            export_excel(table, '0', 2, counter)
-            export_excel(table, '0', 3, counter)
-        counter += 1
+    if link_vi:
+        html = html_obj(link_vi)
+        specifications = for_vi(html)
+        export_excel(table, specifications, 2, counter)
+        photos = vi_photo(html)
+        export_excel(table, photos, 3, counter)
+    elif link_po:
+        html = requests.get(link_po).text
+        specifications = for_po(html)
+        export_excel(table, specifications, 2, counter)
+        photos = po_photo(html)
+        export_excel(table, photos, 3, counter)
+    elif link_ku:
+        html = requests.get(link_ku).text
+        specifications = for_po(html)
+        export_excel(table, specifications, 2, counter)
+        photos = ku_photo(html)
+        export_excel(table, photos, 3, counter)
+    else:
+        export_excel(table, '0', 2, counter)
+        export_excel(table, '0', 3, counter)
+    counter += 1
 
     return 'Программа выполнена успешно!'
 
 
-path_in_table = 'Щетки, наждаки, напильники.xlsx'
+path_in_table = 'Электроды, припой.xlsx'
 
-start_ = 168
-for i in range(250):
+start_ = 78
+for i in range(10):
     try:
         test = main(path_in_table, start_, start_ + 1)
         start_ += 1
         print(start_)
-    except SessionNotCreatedException:
-        print(f'Ошибка создания сессии WebDriver на {start_}-й строчке!')
-        test = main(path_in_table, start_, start_ + 1)
-        start_ += 1
     except Exception:
         print(f'Неизвестная ошибка!')
         test = main(path_in_table, start_, start_ + 1)

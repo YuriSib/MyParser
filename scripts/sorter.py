@@ -6,7 +6,7 @@ def sort_excel_by_second_column(table_path):
     sheet = workbook.active
     data = sheet.iter_rows(values_only=True)
 
-    sorted_data = sorted(data, key=lambda x: x[2] if x[2] is not None else '')  # Сортировка по второй колонке
+    sorted_data = sorted(data, key=lambda x: x[3] if x[3] is not None else '')  # Сортировка по второй колонке
 
     new_rows = []
     for row in sorted_data:
@@ -23,5 +23,5 @@ def sort_excel_by_second_column(table_path):
     workbook.save(table_path)
 
 
-file_path = 'Щетки, наждаки, напильники.xlsx'  # Укажите путь к вашему Excel файлу
+file_path = 'Шпатели, правила.xlsx'  # Укажите путь к вашему Excel файлу
 sort_excel_by_second_column(file_path)

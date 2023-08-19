@@ -15,7 +15,6 @@ def import_xl(table, start, finish):
             search_query = name
         else:
             search_query = name + ' ' + article
-
         list_category.append(search_query)
 
     return list_category
