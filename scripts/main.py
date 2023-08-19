@@ -39,10 +39,10 @@ def main(table, start, finish):
     return 'Программа выполнена успешно!'
 
 
-path_in_table = 'Электроды, припой.xlsx'
+path_in_table = 'Комплектующие для электроинструмента.xlsx'
 
-start_ = 78
-for i in range(10):
+start_ = 1
+for i in range(100):
     try:
         test = main(path_in_table, start_, start_ + 1)
         start_ += 1

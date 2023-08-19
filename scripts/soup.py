@@ -28,15 +28,16 @@ def vi_photo(html):
 
     div_element_name_1 = soup.find('div', class_='item -selectable -active')
 
-    link_to_the_photo = div_element_name_1.find('a')['href']
-    photo_list.append(link_to_the_photo)
-
-    div_element_names = soup.find_all('div', class_='item -selectable')
-
-    for element in div_element_names:
-        link = element.find('a')
-        if link:
-            photo_list.append(link['href'])
+    if div_element_name_1 is not None:
+        link_to_the_photo = div_element_name_1.find('a')['href']
+        photo_list.append(link_to_the_photo)
+        div_element_names = soup.find_all('div', class_='item -selectable')
+        for element in div_element_names:
+            link = element.find('a')
+            if link:
+                photo_list.append(link['href'])
+    else:
+        photo_list = [0]
 
     return photo_list
 
