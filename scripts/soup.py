@@ -52,10 +52,12 @@ def for_po(html):
 
 
 def po_photo(html):
+    photo_list = []
     soup = BeautifulSoup(html, 'lxml')
     link = soup.find('div', class_='col-12 col-md-7 col-lg-5 col-xl-5 product-image').find('img')['src']
+    photo_list.append(f'https:{link}')
 
-    return 'https:' + link
+    return photo_list
 
 
 def for_ku(html):
@@ -77,8 +79,10 @@ def for_ku(html):
 
 
 def ku_photo(html):
+    photo_list = []
     soup = BeautifulSoup(html, 'lxml')
     link = soup.find('div', class_='product-gallery__slider-item '
                                    'swiper-slide swiper-slide-visible swiper-slide-active').find('img')['src']
+    photo_list.append(f'https:{link}')
 
-    return link
+    return photo_list
