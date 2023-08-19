@@ -37,7 +37,7 @@ def vi_photo(html):
             if link:
                 photo_list.append(link['href'])
     else:
-        photo_list = [0]
+        photo_list = ['Изображение не найдено']
 
     return photo_list
 
