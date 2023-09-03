@@ -27,7 +27,7 @@ def main(table, start, finish):
         export_excel(table, photos, 3, counter)
     elif link_ku:
         html = requests.get(link_ku).text
-        specifications = for_po(html)
+        specifications = for_ku(html)
         export_excel(table, specifications, 2, counter)
         photos = ku_photo(html)
         export_excel(table, photos, 3, counter)
@@ -39,10 +39,10 @@ def main(table, start, finish):
     return 'Программа выполнена успешно!'
 
 
-path_in_table = 'Комплектующие для электроинструмента.xlsx'
+path_in_table = 'Электроинструмент.xlsx'
 
 start_ = 1
-for i in range(100):
+for i in range(200):
     try:
         test = main(path_in_table, start_, start_ + 1)
         start_ += 1

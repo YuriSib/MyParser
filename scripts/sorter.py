@@ -23,5 +23,5 @@ def sort_excel_by_second_column(table_path):
     workbook.save(table_path)
 
 
-file_path = 'Электроды, припой.xlsx'  # Укажите путь к вашему Excel файлу
+file_path = 'Электроинструмент.xlsx'  # Укажите путь к вашему Excel файлу
 sort_excel_by_second_column(file_path)

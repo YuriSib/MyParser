@@ -1,16 +1,29 @@
-from playwright.sync_api import sync_playwright
+from selenium import webdriver
+from selenium_stealth import stealth
 
 
 def html_obj(url):
-    with sync_playwright() as p:
-        # для отображения браузера-эмулятора в аргументе функции прописать - (headless=False, slow_mo=50)
-        browser = p.chromium.launch(headless=True)
-        page = browser.new_page()
+        options = webdriver.ChromeOptions()
+        options.add_argument("start-maximized")
 
-        page.goto(url)
+        # options.add_argument("--headless")
 
-        html = page.content()
-        browser.close()
-    return html
+        options.add_experimental_option("excludeSwitches", ["enable-automation"])
+        options.add_experimental_option('useAutomationExtension', False)
+        options.add_argument("--headless")
+        driver = webdriver.Chrome(options=options)
 
 
+        stealth(driver,
+                languages=["en-US", "en"],
+                vendor="Google Inc.",
+                platform="Win32",
+                webgl_vendor="Intel Inc.",
+                renderer="Intel Iris OpenGL Engine",
+                fix_hairline=True,
+                )
+        driver.get(url=url)
+
+        html = driver.page_source
+
+        return html

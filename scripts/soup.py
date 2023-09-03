@@ -67,14 +67,15 @@ def for_ku(html):
     block = []
     for description in descriptions:
         text_list = description.find_all('td')
-        all_td = []
+        all_td = ''
         count = 0
         for text in text_list:
             if count == 0:
-                all_td.append('• ' + text)
+                all_td += ('• ' + text.get_text(strip=True))
             else:
-                all_td.append((' : ' + text + '\n'))
-        block.extend(all_td)
+                all_td += (' : ' + text.get_text(strip=True) + '\n')
+            count += 1
+        block.append(all_td)
 
     return block
 
@@ -82,8 +83,8 @@ def for_ku(html):
 def ku_photo(html):
     photo_list = []
     soup = BeautifulSoup(html, 'lxml')
-    link = soup.find('div', class_='product-gallery__slider-item '
-                                   'swiper-slide swiper-slide-visible swiper-slide-active').find('img')['src']
+    link = soup.find('img')['src']
+    # link = soup.find('div', class_='product-gallery__slider-item swiper-slide swiper-slide-visible swiper-slide-active')
     photo_list.append(f'https:{link}')
 
     return photo_list
