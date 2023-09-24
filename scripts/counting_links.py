@@ -8,7 +8,7 @@ from import_from_excel import import_xl
 
 
 def save_in_pickle():
-    qwery_list = list_of_requests(import_xl("Атласы; Грамоты; Календари.xlsx"))
+    qwery_list = list_of_requests(import_xl("Канцтовары.xlsx"))
 
     count = 0
     for qwery in qwery_list:
@@ -26,6 +26,9 @@ def save_in_pickle():
         loaded_list = pickle.load(file)
 
 
+# save_in_pickle()
+
+
 full_list_link = []
 file_list = os.listdir('List link')
 
@@ -36,5 +39,5 @@ for file_name in file_list:
 
 counted_elements = Counter(full_list_link)
 for element, count in counted_elements.items():
-    if count > 1:  # Фильтруем элементы, которые повторяются хотя бы один раз
+    if count > 300:
         print(f"Сайт {element} встречается в поиске {count} раз(а)")

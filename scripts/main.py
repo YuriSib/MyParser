@@ -1,54 +1,33 @@
-import requests
-
-from import_from_excel import import_xl
+from import_from_excel import import_xl, import_xl_test
 from ya_search import list_of_requests
 from search import search_xml
-from html_master import html_obj
-from soup import for_vi, vi_photo, for_po, po_photo, for_ku, ku_photo
+from html_master import sima_master
 from export_in_excel import export_excel, quantity_row
 
 
-def main(table, start, finish):
-    qwery = list_of_requests(import_xl(table, start, finish))
+def main(table, start):
+    qwery = list_of_requests(import_xl_test(table, start))
 
-    link_vi, link_ku, link_po = search_xml(qwery)
-    counter = start
-    if link_vi:
-        html = html_obj(link_vi)
-        specifications = for_vi(html)
-        export_excel(table, specifications, 2, counter)
-        photos = vi_photo(html)
-        export_excel(table, photos, 3, counter)
-    elif link_po:
-        html = requests.get(link_po).text
-        specifications = for_po(html)
-        export_excel(table, specifications, 2, counter)
-        photos = po_photo(html)
-        export_excel(table, photos, 3, counter)
-    elif link_ku:
-        html = requests.get(link_ku).text
-        specifications = for_ku(html)
-        export_excel(table, specifications, 2, counter)
-        photos = ku_photo(html)
-        export_excel(table, photos, 3, counter)
-    else:
-        export_excel(table, '0', 2, counter)
-        export_excel(table, '0', 3, counter)
-    counter += 1
+    sima_link = search_xml(qwery)
 
-    return 'Программа выполнена успешно!'
+    if sima_link:
+        property_, image_list = sima_master(sima_link[0])
+        export_excel(table, [property_], 2, start)
+        export_excel(table, image_list, 3, start)
+    # elif ozon_link:
+    #     property_, image_list = ozon_master(ozon_link[0])
+    #     export_excel(table, [property_], 2, start)
+    #     export_excel(table, image_list, 3, start)
 
 
-path_in_table = 'Электроинструмент.xlsx'
+path_in_table = 'Ластики, резинки стиральные.xlsx'
 
 start_ = 1
-for i in range(200):
+for i in range(50):
     try:
-        test = main(path_in_table, start_, start_ + 1)
-        start_ += 1
-        print(start_)
+        main(path_in_table, start_)
     except Exception:
         print(f'Неизвестная ошибка!')
-        test = main(path_in_table, start_, start_ + 1)
-        start_ += 1
+    print(start_)
+    start_ += 1
 

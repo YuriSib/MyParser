@@ -1,9 +1,5 @@
 import requests
 from bs4 import BeautifulSoup
-import pickle
-
-from import_from_excel import import_xl
-from ya_search import list_of_requests
 
 
 def search_xml(qwery):
@@ -12,22 +8,15 @@ def search_xml(qwery):
     response = requests.get(url)
     dirty_list_link = BeautifulSoup(response.text, features="xml").find_all('url')
     list_link = [link.text.strip('</url>') for link in dirty_list_link]
-    link_vi = []
-    link_ku = []
-    link_po = []
 
-    # for lnk in list_link:
-    #     if 'vseinstrumenti.ru/product' in lnk and 'otzyvy' not in lnk:
-    #         if len(link_vi) == 0:
-    #             link_vi.append(lnk)
-    #             link_vi = ''.join(link_vi)
-    #     elif 'https://www.kuvalda.ru/' in lnk and '/product' in lnk:
-    #         if len(link_ku) == 0:
-    #             link_ku.append(lnk)
-    #             link_ku = ''.join(link_ku)
-    #     elif 'poryadok.ru' in lnk and lnk.count('/') > 6:
-    #         if len(link_po) == 0:
-    #             link_po.append(lnk)
-    #             link_po = ''.join(link_po)
+    sima_link = []
+    ozon_link = []
+    for lnk in list_link:
+        # if 'https://www.OZON.ru/product/' in lnk or 'https://www.ozon.ru/product/' in lnk:
+        #     ozon_link.append(lnk)
+        if 'https://www.sima-land.ru/' in lnk or 'https://www.SIMA-LAND.ru/' in lnk:
+            sima_link.append(lnk)
+        elif 'https://fkniga.ru/catalog/' in lnk:
+            pass
 
-    return list_link #link_vi, link_ku, link_po
+    return sima_link
