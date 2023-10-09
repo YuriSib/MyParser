@@ -20,14 +20,14 @@ def main(table, start):
     #     export_excel(table, image_list, 3, start)
 
 
-path_in_table = 'Ластики, резинки стиральные.xlsx'
+path_in_table = 'Наборы для творчества.xlsx'
 
 start_ = 1
-for i in range(50):
+for i in range(400):
     try:
         main(path_in_table, start_)
-    except Exception:
-        print(f'Неизвестная ошибка!')
+    except Exception as E:
+        print(f'Неизвестная ошибка {E}!')
     print(start_)
     start_ += 1
 
