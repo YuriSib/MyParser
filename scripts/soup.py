@@ -115,6 +115,3 @@ def for_sima(html1, html2):
 
     return photo, property_list
 
-
-def for_officemag():
-    ...
