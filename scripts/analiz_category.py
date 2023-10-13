@@ -21,7 +21,6 @@ def search_xml(qwery):
     url = f'https://xmlstock.com/yandex/xml/?user=11362&key=2a81ea2bf46144411cc5e8c148f5fcfa&query={quote(qwery)}' \
           f'&groupby=attr%3D%22%22.mode%3Dflat.groups-on-page%3D30.docs-in-group%3D1'
     response = requests.get(url)
-
     dirty_list_link = BeautifulSoup(response.text, features="xml").find_all('url')
     list_link = [link.text.strip('</url>') for link in dirty_list_link]
 

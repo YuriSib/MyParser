@@ -114,4 +114,3 @@ def for_sima(html1, html2):
         property_list = f'{property_list} {property_}'
 
     return photo, property_list
-

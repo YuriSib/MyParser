@@ -5,6 +5,95 @@ from bs4 import BeautifulSoup
 from gpt_help import gpt_helper
 
 
+# def for_vi(html):
+#     soup = BeautifulSoup(html, 'lxml')
+#     div_element_name = soup.find_all('div', class_='mbBW2z')
+#     div_element_value = soup.find_all('span', class_='typography text v2 -no-margin zUz8NX')
+#
+#     list_name = []
+#     list_value = []
+#
+#     for row in div_element_name:
+#         span_element_name = row.find('span', class_='typography text v2 -no-margin')
+#         list_name.append(span_element_name.get_text(strip=True))
+#
+#     for row in div_element_value:
+#         span_element_value = row.find('span')
+#         list_value.append(span_element_value.get_text(strip=True))
+#
+#     block = [f'• {x} : {y} \n' for x, y in zip(list_name, list_value)]
+#
+#     return block
+#
+#
+# def vi_photo(html):
+#     photo_list = []
+#     soup = BeautifulSoup(html, 'lxml')
+#
+#     div_element_name_1 = soup.find('div', class_='item -selectable -active')
+#
+#     if div_element_name_1 is not None:
+#         link_to_the_photo = div_element_name_1.find('a')['href']
+#         photo_list.append(link_to_the_photo)
+#         div_element_names = soup.find_all('div', class_='item -selectable')
+#         for element in div_element_names:
+#             link = element.find('a')
+#             if link:
+#                 photo_list.append(link['href'])
+#     else:
+#         photo_list = ['Изображение не найдено']
+#
+#     return photo_list
+#
+
+# def for_po(html):
+#     soup = BeautifulSoup(html, 'lxml')
+#     descriptions = soup.find('div', {'itemprop': 'description'}).find_all('li')
+#     block = []
+#     for description in descriptions:
+#         block.append(('• ' + description.get_text(strip=True) + '\n'))
+#
+#     return block
+
+#
+# def po_photo(html):
+#     photo_list = []
+#     soup = BeautifulSoup(html, 'lxml')
+#     link = soup.find('div', class_='col-12 col-md-7 col-lg-5 col-xl-5 product-image').find('img')['src']
+#     photo_list.append(f'https:{link}')
+#
+#     return photo_list
+#
+#
+# def for_ku(html):
+#     soup = BeautifulSoup(html, 'lxml')
+#     descriptions = soup.find('div', class_='product-specs__table').find_all('tr')
+#     block = []
+#     for description in descriptions:
+#         text_list = description.find_all('td')
+#         all_td = ''
+#         count = 0
+#         for text in text_list:
+#             if count == 0:
+#                 all_td += ('• ' + text.get_text(strip=True))
+#             else:
+#                 all_td += (' : ' + text.get_text(strip=True) + '\n')
+#             count += 1
+#         block.append(all_td)
+#
+#     return block
+#
+#
+# def ku_photo(html):
+#     photo_list = []
+#     soup = BeautifulSoup(html, 'lxml')
+#     link = soup.find('img')['src']
+#     # link = soup.find('div', class_='product-gallery__slider-item swiper-slide swiper-slide-visible swiper-slide-active')
+#     photo_list.append(f'https:{link}')
+#
+#     return photo_list
+
+
 def useragent_soup(url_):
     ua = UserAgent()
     user_agent = ua.random
@@ -23,9 +112,9 @@ def fkniga_scrapper(url_):
 
     dirty_specification = soup.find('div', {'class': 'section section--descriptionArticle'}).get_text(strip=True)
     dirty_specification = dirty_specification.strip('Описание товара')
-    specification_ = gpt_helper(dirty_specification)
+    specification_list = gpt_helper(dirty_specification)
 
-    return photo_list, specification_
+    return photo_list, specification_list
 
 
 def maguss_scrapper(url_):
@@ -41,18 +130,46 @@ def maguss_scrapper(url_):
 
     specification_ = str
     dirty_specifications = soup.find_all('tr', {'class': 'js-prop-replace'})
-    for specification in dirty_specifications:
-        property_name = specification.find('div', {'class': 'props_item'}).get_text(strip=True)
-        if 'трихкод' not in property_name and 'ренд' not in property_name and 'овары комплекта' not in property_name \
-        and 'собенность_' not in property_name and 'од товара' not in property_name and 'наличии' not in property_name:
-            property_value = specification.find('td', {'class': 'char_value'}).get_text(strip=True)
-            property_ = f"• {property_name} : {property_value} \n"
-            specification_ = f'{specification_} {property_}'
+    if dirty_specifications:
+        for specification in dirty_specifications:
+            property_name = specification.find('div', {'class': 'props_item'}).get_text(strip=True)
+            if 'трихкод' not in property_name and 'ренд' not in property_name and 'овары комплекта' not in property_name \
+            and 'собенность_' not in property_name and 'од товара' not in property_name and 'наличии' not in property_name:
+                property_value = specification.find('td', {'class': 'char_value'}).get_text(strip=True)
+                property_ = f"• {property_name} : {property_value} \n"
+                specification_ = f'{specification_} {property_}'
+    else:
+        specification_ = False
 
     return photo_list, specification_
 
 
-url = 'https://maguss.ru/catalog/299676/#desc'
-result, specification_ = maguss_scrapper(url)
-print(specification_)
+def anytos_scrapper(url_):
+    soup = useragent_soup(url_)
 
+    html_photo = soup.find('div', {'id': 'anitos-catalog-element-photos'})
+    photo_ = 'https://anytos.ru/' + html_photo.a['href']
+
+    specifications = soup.find('div', {'class': 's7sbp--marketplace--catalog-element-detail-product--tabs--body--item '
+                                               'active'}).get_text(strip=True)
+    specification_list = gpt_helper(specifications)
+
+    return photo_, specification_list
+
+
+def wb_master(url_):
+    soup = useragent_soup(url_)
+
+    html_photo = soup.find('div', {'class': 'zoom-image-container'})
+    photo_ = html_photo.img['src']
+
+    specifications = soup.find('div', {'class': 'collapsable__content j-description'}).get_text(strip=True)
+    specification_list = gpt_helper(specifications)
+
+    return photo_, specification_list
+
+
+if __name__ == "__main__":
+    url = 'https://www.ozon.ru/product/avtovizitka-parkovochnaya-kartochka-258910776/?avtc=1&avte=2&avts=1697212649'
+    response = requests.get(url)
+    print(response)

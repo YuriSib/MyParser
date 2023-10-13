@@ -1,11 +1,12 @@
 import openpyxl
 
 
-def export_excel(table, values_list, column, row):
+def export_excel(table, value, column, row):
     workbook = openpyxl.load_workbook(table)
     sheet = workbook.active
-    combined_values = ', '.join(values_list)
-    sheet[row][column].value = combined_values
+    if type(value) == list:
+        value = ', '.join(value)
+    sheet[row][column].value = value
     workbook.save(table)
 
 

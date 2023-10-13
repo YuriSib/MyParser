@@ -28,9 +28,7 @@ def import_xl(table, start=None, finish=None):
 def import_xl_test(table, row):
     catalog = openpyxl.open(table, read_only=True)
     sheet = catalog.active
-    list_category = []
 
-    search_query = ''
     name = sheet[row][0].value
     if name is None:
         name = 0
@@ -42,6 +40,5 @@ def import_xl_test(table, row):
             search_query = name + ' ' + article
         except TypeError:
             search_query = ''
-    list_category.append(search_query)
 
-    return list_category
+    return search_query
