@@ -16,7 +16,7 @@ def main(table, start):
 
 path_in_table = 'Наборы для творчества.xlsx'
 
-start_ = 1
+start_ = 52
 for i in range(400):
     try:
         main(path_in_table, start_)

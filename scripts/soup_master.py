@@ -157,16 +157,16 @@ def anytos_scrapper(url_):
     return photo_, specification_list
 
 
-def wb_master(url_):
-    soup = useragent_soup(url_)
-
-    html_photo = soup.find('div', {'class': 'zoom-image-container'})
-    photo_ = html_photo.img['src']
-
-    specifications = soup.find('div', {'class': 'collapsable__content j-description'}).get_text(strip=True)
-    specification_list = gpt_helper(specifications)
-
-    return photo_, specification_list
+# def wb_master(url_):
+#     soup = useragent_soup(url_)
+#
+#     html_photo = soup.find('div', {'class': 'zoom-image-container'})
+#     photo_ = html_photo.img['src']
+#
+#     specifications = soup.find('div', {'class': 'collapsable__content j-description'}).get_text(strip=True)
+#     specification_list = gpt_helper(specifications)
+#
+#     return photo_, specification_list
 
 
 if __name__ == "__main__":
