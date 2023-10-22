@@ -60,10 +60,16 @@ def sima_master(url):
         image_list = []
         html = driver.page_source
         soup = BeautifulSoup(html, 'lxml')
-        try:
-                image_list.append(soup.find('div', {'class': '_ujOS'}).find('img')['src'])
-        except AttributeError:
-                image_list.append(soup.find('div', {'data-testid': 'product-photo:root'}).find('img')['src'])
+
+        html_image = soup.find('div', {'class': 'xWH7I pd1jo'})
+        if html_image:
+                img = html_image.find('img')['src']
+                image_list.append(img)
+        else:
+                html_image = soup.find('div', {'data-testid': 'product-photo:root'})
+                if html_image:
+                        img = html_image.find('img')['src']
+                        image_list.append(img)
 
         xpath_list = [
                 '''//*[@id="product__root"]/div/div[3]/div[1]/div/div[1]/div/div[1]/div/div/div/div/div[2]''',
@@ -89,7 +95,7 @@ def sima_master(url):
         html = driver.page_source
         soup = BeautifulSoup(html, 'lxml')
         specifications = soup.find_all('div', {'class': 'vunEu'})
-        property_list = str
+        property_list = None
         general_list = specifications[0].find_all('div', {'class': 'S3jLY'})
 
         for general in general_list:
@@ -97,15 +103,15 @@ def sima_master(url):
                 if 'Артикул' not in property_name and 'Сертификат' not in property_name and \
                         'Торговая марка' not in property_name and 'Европодвес' not in property_name and\
                         'Штрихкод' not in property_name:
-                        property_value = general.find('div', {'class': 'MZwdI'}).get_text(strip=True)
+                        property_value = general.find('div', {'class': 'qAQCt'}).get_text(strip=True)
                         property_ = f"• {property_name} : {property_value} \n"
                         property_list = f'{property_list} {property_}'
 
         try:
-                general_list = specifications[3].find_all('div', {'class': 'BheKE'})
+                general_list = specifications[3].find_all('div', {'class': 'S3jLY'})
                 for general in general_list:
                         property_name = general.find('div', {'class': 'property-name'}).get_text(strip=True)
-                        property_value = general.find('div', {'class': 'MZwdI'}).get_text(strip=True)
+                        property_value = general.find('div', {'class': 'qAQCt'}).get_text(strip=True)
                         property_ = f"• {property_name} : {property_value}\n"
                         property_list = f'{property_list} {property_}'
         except IndexError as e:
@@ -130,7 +136,7 @@ def relefopt_master(url):
         html_list_specification = soup.find_all('a', {'class': 'src-components-Product-PropertyTable--trProperty '
                                                                 'src-components-Product-PropertyTable--trProductTabs'})
 
-        property_list = str
+        property_list = None
 
         for dirty_specification in html_list_specification:
                 property_name = dirty_specification.find('div', {'class': 'src-components-Product-PropertyTable--'
@@ -182,7 +188,7 @@ def yandex_market_master(url):
         html = driver.page_source
         soup = BeautifulSoup(html, 'lxml')
 
-        property_list = str
+        property_list = None
         html_list_specification = soup.find_all('div', {'class': '_198Aj cXkP_ _3wss4 _1XOOj'})
         for specification in html_list_specification:
                 property_name = specification.find('div', {'class': '_1oG4-'}).get_text(strip=True)
@@ -193,8 +199,9 @@ def yandex_market_master(url):
                         property_list = f'{property_list} {property_}'
 
         image_list = []
-        html_list_photo = soup.find('div', {'id': 'ProductImageGallery'}).find('div', {'class': '_1HSAJ'})
-        photo = 'https://market.yandex.ru/' + html_list_photo.img['src']
+        html_list_photo = soup.find('div', {'id': 'ProductImageGallery'})
+        list_photo = html_list_photo.find('div', {'class': '_1HSAJ'}) if html_list_photo else False
+        photo = 'https://market.yandex.ru/' + list_photo.img['src'] if list_photo else 0
         image_list.append(photo)
 
         xpath_list = [
@@ -219,25 +226,31 @@ def ozon_master(url):
         driver.get(url=url)
         wait = WebDriverWait(driver, 20)
 
+        not_found = driver.find_element('xpath', '''//*[@id="layoutPage"]/div[1]/div[2]/div[1]/div/div[1]/div[1]
+        /div[1]/div/div/div/div[1]/div[1]''')
+        if not_found:
+                not_found.click()
+
         html = driver.page_source
         soup = BeautifulSoup(html, 'lxml')
 
-        property_list = str
-        html_list_specification = soup.find_all('dl', {'class': 's5j'})
+        property_list = None
+        html_list_specification = soup.find_all('dl', {'class': 'j7s'})
         for specification in html_list_specification:
-                property_name = specification.find('dt', {'class': 's4j'}).get_text(strip=True)
-                property_value = specification.find('dd', {'class': 'js5'}).get_text(strip=True)
+                property_name = specification.find('dt', {'class': 'j6s'}).get_text(strip=True)
+                property_value = specification.find('dd', {'class': 'sj6'}).get_text(strip=True)
                 property_ = f"• {property_name} : {property_value} \n"
                 property_list = f'{property_list} {property_}'
 
         image_list = []
-        photo = soup.find('div', {'class': 'lj7'}).img['src']
+        html_photo = soup.find('div', {'class': 'jl9'})
+        photo = html_photo.img['src'] if html_photo else 0
         image_list.append(photo)
 
         xpath_list = [
-                '''//*[@id="layoutPage"]/div[1]/div[4]/div[3]/div[1]/div[1]/div[1]/div/div[2]/div/div[2]/div[1]/div/div[2]/div''',
-                '''//*[@id="layoutPage"]/div[1]/div[4]/div[3]/div[1]/div[1]/div[1]/div/div[2]/div/div[2]/div[1]/div/div[3]/div''',
-                '''//*[@id="layoutPage"]/div[1]/div[4]/div[3]/div[1]/div[1]/div[1]/div/div[2]/div/div[2]/div[1]/div/div[4]/div'''
+                '''//*[@id="layoutPage"]/div[1]/div[4]/div[3]/div[1]/div[1]/div[1]/div/div[2]/div/div[2]/div[1]/div/div[2]/div[3]/div/img''',
+                '''//*[@id="layoutPage"]/div[1]/div[4]/div[3]/div[1]/div[1]/div[1]/div/div[2]/div/div[2]/div[1]/div/div[2]/div[4]/div/img''',
+                '''//*[@id="layoutPage"]/div[1]/div[4]/div[3]/div[1]/div[1]/div[1]/div/div[2]/div/div[2]/div[1]/div/div[2]/div[5]/div/img'''
         ]
         for xpath in xpath_list:
                 choose_photo = driver.find_elements("xpath", xpath)
@@ -247,7 +260,7 @@ def ozon_master(url):
                         /div[3]/div[1]/div[1]/div[1]/div/div[2]/div/div[1]/div[1]/div''')))
                         html2 = driver.page_source
                         soup2 = BeautifulSoup(html2, 'lxml')
-                        image_list.append(soup2.find('div', {'class': 'lj7'}).img['src'])
+                        image_list.append(soup2.find('div', {'class': 'jl9'}).img['src'])
 
         return image_list, property_list
 
@@ -257,14 +270,36 @@ def wb_master(url):
         driver.get(url=url)
 
         wait = WebDriverWait(driver, 20)
+
+        try:
+                driver.find_element("xpath", '''//*[@id="imageContainer"]/div/div/canvas''')
+        except Exception:
+                return 0, 0
+
         wait.until(EC.presence_of_element_located(("xpath", '''//*[@id="imageContainer"]/div/div/canvas''')))
 
         html = driver.page_source
         soup = BeautifulSoup(html, 'lxml')
 
-        property_list = str
-        html_specification = soup.find('div', {'class': 'collapsable__content j-description'}).get_text(strip=True)
-        specification_list = gpt_helper(html_specification)
+        specification = soup.find('div', {'class': 'collapsable__content j-description'}).get_text(strip=True)
+
+        if specification != '':
+                specifications = gpt_helper(specification)
+                if specifications is False:
+                        specifications = specification
+        else:
+                html_list_specification = soup.find_all('tr', {'class': 'product-params__row'})
+                for specification in html_list_specification:
+                        html_property_name = specification.find('th', {'class': 'product-params__cell'})
+                        property_name = html_property_name.get_text(strip=True) if html_property_name else 0
+
+                        if 'Вес' not in property_name:
+                                html_property_value = specification.find('td', {'class': 'product-params__cell'})
+                                property_value = html_property_value.get_text(strip=True) if html_property_value else 0
+                                property_ = f"• {property_name} : {property_value} \n"
+                                specification = f'{specification} {property_}'
+                                specifications = specification
+
 
         image_list = []
         photo_ = soup.find('div', {'class': 'zoom-image-container'}).img['src']
@@ -285,7 +320,7 @@ def wb_master(url):
                         soup2 = BeautifulSoup(html2, 'lxml')
                         image_list.append(soup2.find('div', {'class': 'zoom-image-container'}))
 
-        return image_list, specification_list
+        return image_list, specifications
 
 
 if __name__ == "__main__":

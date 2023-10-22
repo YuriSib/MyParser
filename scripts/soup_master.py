@@ -118,9 +118,12 @@ def fkniga_scrapper(url_):
 
 
 def maguss_scrapper(url_):
-    url_ = url_.split('/')
-    url_[-1] = '#props'
-    url_ = '/'.join(url_)
+    if '#reviews' in url_:
+        url_ = url_.split('/')
+        url_[-1] = '#props'
+        url_ = '/'.join(url_)
+    elif '#props' not in url_:
+        url_ = url_ + '/#props'
 
     soup = useragent_soup(url_)
 
@@ -139,7 +142,8 @@ def maguss_scrapper(url_):
                 property_ = f"• {property_name} : {property_value} \n"
                 specification_ = f'{specification_} {property_}'
     else:
-        specification_ = False
+        html_specification_ = soup.find('div', {'class': 'content detail-text-wrap'})
+        specification_ = gpt_helper(html_specification_.get_text(strip=True)) if html_specification_ else specification_ is False
 
     return photo_list, specification_
 
@@ -153,6 +157,10 @@ def anytos_scrapper(url_):
     specifications = soup.find('div', {'class': 's7sbp--marketplace--catalog-element-detail-product--tabs--body--item '
                                                'active'}).get_text(strip=True)
     specification_list = gpt_helper(specifications)
+    if '!DOCTYPE html' in specification_list:
+        specification_list = gpt_helper(specifications)
+    if '!DOCTYPE html' in specification_list:
+        specification_list = specifications
 
     return photo_, specification_list
 

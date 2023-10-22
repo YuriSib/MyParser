@@ -10,7 +10,7 @@ from soup_master import fkniga_scrapper, maguss_scrapper, anytos_scrapper
 def search_xml(qwery):
     product = quote(qwery)
     url = f'https://xmlstock.com/yandex/xml/?user=11362&key=2a81ea2bf46144411cc5e8c148f5fcfa&query=' \
-          f'{product}&groupby=attr%3D%22%22.mode%3Dflat.groups-on-page%3D30.docs-in-group%3D1'
+          f'{product}&groupby=attr%3D%22%22.mode%3Dflat.groups-on-page%3D40.docs-in-group%3D1'
     response = requests.get(url)
     dirty_list_link = BeautifulSoup(response.text, features="xml").find_all('url')
     list_link = [link.text.strip('</url>') for link in dirty_list_link]
@@ -47,7 +47,7 @@ def search_xml(qwery):
             if property_list:
                 return image_list, property_list
 
-        elif 'SIMA-LAND' in link or 'sima-land' in link:
+        elif ('SIMA-LAND' in link or 'sima-land' in link) and 'otzyv' not in link:
             image_list, property_list = sima_master(link)
             if property_list:
                 return image_list, property_list
@@ -57,7 +57,7 @@ def search_xml(qwery):
             if property_list:
                 return image_list, property_list
 
-        elif 'ozon' in link or 'OZON' in link:
+        elif ('ozon' in link or 'OZON' in link) and 'category' not in link:
             image_list, property_list = ozon_master(link)
             if property_list:
                 return image_list, property_list
