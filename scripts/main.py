@@ -14,7 +14,7 @@ def main(table, start):
         image, property_ = 0, 0
 
 
-path_in_table = 'Канцтовары.xlsx'
+path_in_table = 'Наборы для творчества.xlsx'
 
 # for i in (166, 167, 168, 169, 173, 174, 176, 178, 180):
 #     try:
