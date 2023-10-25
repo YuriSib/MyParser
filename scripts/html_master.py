@@ -102,24 +102,16 @@ def wb_master(url):
         html = driver.page_source
         soup = BeautifulSoup(html, 'lxml')
 
-        specification = soup.find('div', {'class': 'collapsable__content j-description'}).get_text(strip=True)
-
-        if specification != '':
-                specifications = gpt_helper(specification)
-                if specifications is False:
+        html_list_specification = soup.find_all('tr', {'class': 'product-params__row'})
+        for specification in html_list_specification:
+                html_property_name = specification.find('th', {'class': 'product-params__cell'})
+                property_name = html_property_name.get_text(strip=True) if html_property_name else 0
+                if 'Вес' not in property_name:
+                        html_property_value = specification.find('td', {'class': 'product-params__cell'})
+                        property_value = html_property_value.get_text(strip=True) if html_property_value else 0
+                        property_ = f"• {property_name} : {property_value} \n"
+                        specification = f'{specification} {property_}'
                         specifications = specification
-        else:
-                html_list_specification = soup.find_all('tr', {'class': 'product-params__row'})
-                for specification in html_list_specification:
-                        html_property_name = specification.find('th', {'class': 'product-params__cell'})
-                        property_name = html_property_name.get_text(strip=True) if html_property_name else 0
-
-                        if 'Вес' not in property_name:
-                                html_property_value = specification.find('td', {'class': 'product-params__cell'})
-                                property_value = html_property_value.get_text(strip=True) if html_property_value else 0
-                                property_ = f"• {property_name} : {property_value} \n"
-                                specification = f'{specification} {property_}'
-                                specifications = specification
 
 
         image_list = []
