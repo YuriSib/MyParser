@@ -14,7 +14,6 @@ def main(table, start):
         image, property_ = 0, 0
 
 
-
 path_in_table = 'Наборы для творчества.xlsx'
 
 # for i in (166, 167, 168, 169, 173, 174, 176, 178, 180):
@@ -25,7 +24,7 @@ path_in_table = 'Наборы для творчества.xlsx'
 #         print(f'Неизвестная ошибка {E}!')
 #     print(i)
 
-start_ = 182
+start_ = 30
 for i in range(400):
     # try:
     main(path_in_table, start_)

@@ -9,6 +9,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium_stealth import stealth
+from selenium.common.exceptions import NoSuchElementException
 
 
 def settings():
@@ -72,15 +73,21 @@ def sima_master(url):
                         image_list.append(img)
 
         xpath_list = [
-                '''//*[@id="product__root"]/div/div[3]/div[1]/div/div[1]/div/div[1]/div/div/div/div/div[2]''',
-                '''//*[@id="product__root"]/div/div[3]/div[1]/div/div[1]/div/div[1]/div/div/div/div/div[3]''',
-                '''//*[@id="product__root"]/div/div[3]/div[1]/div/div[1]/div/div[1]/div/div/div/div/div[4]'''
+                '''//*[@id="product__root"]/div/div[3]/div[1]/div/div[1]/div/div[1]/div/div/div/div/div[2]/img''',
+                '''/html/body/div[2]/div/div[3]/div[1]/div/div[1]/div/div[1]/div/div/div/div/div[3]''',
+                '''/html/body/div[2]/div/div[3]/div[1]/div/div[1]/div/div[1]/div/div/div/div/div[4]'''
         ]
         for xpath in xpath_list:
-                choose_photo = driver.find_elements("xpath", xpath)
+                try:
+                        choose_photo = driver.find_element(By.XPATH, xpath)
+                except NoSuchElementException:
+                        choose_photo = None
                 if choose_photo:
-                        soup = click_to_photo(driver, choose_photo)
-                        image_list.append(soup.find('span', {'class': 'iEmif LHQ7Y'}).find('img')['src'])
+                        choose_photo.click()
+                        html = driver.page_source
+                        soup2 = BeautifulSoup(html, 'lxml')
+
+                        image_list.append(soup2.find('div', {'class': 'xWH7I pd1jo'}).find('img')['src'])
                         ActionChains(driver).send_keys(Keys.ESCAPE).perform()
 
         button_specifications = driver.find_elements("xpath", '''//*[@id="product__root"]/div/div[3]/div[2]/div[1]/ul/li[2]''')
@@ -126,10 +133,10 @@ def sima_master(url):
 def relefopt_master(url):
         driver = settings()
         driver.get(url=url)
-        wait = WebDriverWait(driver, 20)
 
-        wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="content"]/div/main/div/div[1]/div/span/div[1]/'
-                            'div/div/div[3]/div/div[2]/div[1]/div/div[2]/div[1]/div/div/div/div[1]/div/div/div/img')))
+        wait = WebDriverWait(driver, 20)
+        wait.until(EC.presence_of_element_located((By.TAG_NAME, "body")))
+
         html = driver.page_source
         soup = BeautifulSoup(html, 'lxml')
 
@@ -153,20 +160,19 @@ def relefopt_master(url):
                         property_list = f'{property_list} {property_}'
 
         image_list = []
-        dirty_photo_list = soup.find('div', {'class': 'src-components-ColumnMain--columnMain src-components-ColumnMain--'
-                                    'columnMainFullWidth'})
-        html_photo_list = dirty_photo_list.find('div', {'class': 'slick-track'})
-        photo = html_photo_list.find('div', {'style': 'outline: none; width: 47px;'}).find('div', {'role':
-                                            'presentation'}).img['src']
+        dirty_photo_list = soup.find('div', {'class': 'src-components-ProductPage-ProductOne--productsOneWrapImage '
+                                                      'src-components-ProductPage-ProductOne--productsOneWrapImageMain'})
+        photo = dirty_photo_list.find('div', {'class': 'src-components-ProductPage-ProductOne--image'}).img['src']
+
         image_list.append(photo)
 
         xpath_list = [
                 '''//*[@id="content"]/div/main/div/div[1]/div/span/div[1]/div/div/div[3]/div/div[2]/div[1]/div/div[2]
-                /div[1]/div/div/div/div[1]/div/div/div''',
+                /div/div/div/div/div[2]/div/div/div/img''',
                 '''//*[@id="content"]/div/main/div/div[1]/div/span/div[1]/div/div/div[3]/div/div[2]/div[1]/div/div[2]
-                /div[1]/div/div/div/div[3]/div/div/div''',
+                /div/div/div/div/div[3]/div/div/div/img''',
                 '''//*[@id="content"]/div/main/div/div[1]/div/span/div[1]/div/div/div[3]/div/div[2]/div[1]/div/div[2]
-                /div[1]/div/div/div/div[2]/div/div/div'''
+                /div/div/div/div/div[4]/div/div/div/img'''
         ]
         for xpath in xpath_list:
                 choose_photo = driver.find_elements("xpath", xpath)
@@ -174,8 +180,12 @@ def relefopt_master(url):
                         click_to_photo(driver, choose_photo)
                         html2 = driver.page_source
                         soup2 = BeautifulSoup(html2, 'lxml')
-                        image_list.append(soup2.find('div', {'style': 'outline: none; width: 47px;'}).find('div', {'role'
-                                                                                        : 'presentation'}).img['src'])
+                        dirty_photo_list = soup2.find('div', {
+                                'class': 'src-components-ProductPage-ProductOne--productsOneWrapImage '
+                                         'src-components-ProductPage-ProductOne--productsOneWrapImageMain'})
+                        photo = dirty_photo_list.find('div', {'class': 'src-components-ProductPage-ProductOne--'
+                                                                       'image'}).img['src']
+                        image_list.append(photo)
 
         return image_list, property_list
 
@@ -201,7 +211,7 @@ def yandex_market_master(url):
         image_list = []
         html_list_photo = soup.find('div', {'id': 'ProductImageGallery'})
         list_photo = html_list_photo.find('div', {'class': '_1HSAJ'}) if html_list_photo else False
-        photo = 'https://market.yandex.ru/' + list_photo.img['src'] if list_photo else 0
+        photo = 'https:' + list_photo.img['src'] if list_photo else 0
         image_list.append(photo)
 
         xpath_list = [
@@ -226,8 +236,11 @@ def ozon_master(url):
         driver.get(url=url)
         wait = WebDriverWait(driver, 20)
 
-        not_found = driver.find_element('xpath', '''//*[@id="layoutPage"]/div[1]/div[2]/div[1]/div/div[1]/div[1]
-        /div[1]/div/div/div/div[1]/div[1]''')
+        try:
+                not_found = driver.find_element('xpath', '''//*[@id="layoutPage"]/div[1]/div[2]/div[1]/div/div[1]/div[1]
+                /div[1]/div/div/div/div[1]/div[1]''')
+        except NoSuchElementException:
+                not_found = None
         if not_found:
                 not_found.click()
 

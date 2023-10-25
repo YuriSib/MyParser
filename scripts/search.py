@@ -28,42 +28,66 @@ def search_xml(qwery):
 
     for link in sorted_link_list:
         if 'maguss' in link:
-            image_list, property_list = maguss_scrapper(link)
+            try:
+                image_list, property_list = maguss_scrapper(link)
+            except AttributeError:
+                image_list, property_list = 0, 0
             if property_list:
                 return image_list, property_list
 
         elif 'fkniga' in link:
-            image_list, property_list = fkniga_scrapper(link)
+            try:
+                image_list, property_list = fkniga_scrapper(link)
+            except AttributeError:
+                image_list, property_list = 0, 0
             if property_list:
                 return image_list, property_list
 
         elif 'anytos' in link:
-            image_list, property_list = anytos_scrapper(link)
+            try:
+                image_list, property_list = anytos_scrapper(link)
+            except AttributeError:
+                image_list, property_list = 0, 0
             if property_list:
                 return image_list, property_list
 
         elif 'wildberries' in link or 'WildBerries' in link:
-            image_list, property_list = wb_master(link)
+            try:
+                image_list, property_list = wb_master(link)
+            except AttributeError:
+                image_list, property_list = 0, 0
             if property_list:
                 return image_list, property_list
 
         elif ('SIMA-LAND' in link or 'sima-land' in link) and 'otzyv' not in link:
-            image_list, property_list = sima_master(link)
+            try:
+                image_list, property_list = sima_master(link)
+            except AttributeError:
+                image_list, property_list = 0, 0
             if property_list:
                 return image_list, property_list
 
         elif 'relefopt' in link:
-            image_list, property_list = relefopt_master(link)
+            try:
+                image_list, property_list = relefopt_master(link)
+            except AttributeError:
+                image_list, property_list = 0, 0
             if property_list:
                 return image_list, property_list
 
         elif ('ozon' in link or 'OZON' in link) and 'category' not in link:
-            image_list, property_list = ozon_master(link)
+            try:
+                image_list, property_list = ozon_master(link)
+            except AttributeError:
+                image_list, property_list = 0, 0
             if property_list:
                 return image_list, property_list
 
         elif 'yandex' in link:
-            image_list, property_list = yandex_market_master(link)
+            try:
+                image_list, property_list = yandex_market_master(link)
+            except AttributeError:
+                image_list, property_list = 0, 0
             if property_list:
                 return image_list, property_list
 
