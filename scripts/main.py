@@ -26,9 +26,9 @@ path_in_table = 'Наборы для творчества.xlsx'
 
 start_ = 182
 for i in range(400):
-    try:
-        main(path_in_table, start_)
-    except Exception as E:
-        print(f'Неизвестная ошибка {E}!')
+    # try:
+    main(path_in_table, start_)
+    # except Exception as E:
+    #     print(f'Неизвестная ошибка {E}!')
     print(start_)
     start_ += 1

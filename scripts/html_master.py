@@ -144,6 +144,53 @@ def wb_master(url):
         return image_list, specifications
 
 
+def ozon_master(url):
+        driver = settings()
+        driver.get(url=url)
+        wait = WebDriverWait(driver, 20)
+
+        try:
+                not_found = driver.find_element('xpath', '''//*[@id="layoutPage"]/div[1]/div[2]/div[1]/div/div[1]/div[1]
+                /div[1]/div/div/div/div[1]/div[1]''')
+        except NoSuchElementException:
+                not_found = None
+        if not_found:
+                not_found.click()
+
+        html = driver.page_source
+        soup = BeautifulSoup(html, 'lxml')
+
+        property_list = None
+        html_list_specification = soup.find_all('dl', {'class': 'j7s'})
+        for specification in html_list_specification:
+                property_name = specification.find('dt', {'class': 'j6s'}).get_text(strip=True)
+                property_value = specification.find('dd', {'class': 'sj6'}).get_text(strip=True)
+                property_ = f"• {property_name} : {property_value} \n"
+                property_list = f'{property_list} {property_}'
+
+        image_list = []
+        html_photo = soup.find('div', {'class': 'jl9'})
+        photo = html_photo.img['src'] if html_photo else 0
+        image_list.append(photo)
+
+        xpath_list = [
+                '''//*[@id="layoutPage"]/div[1]/div[4]/div[3]/div[1]/div[1]/div[1]/div/div[2]/div/div[2]/div[1]/div/div[2]/div[3]/div/img''',
+                '''//*[@id="layoutPage"]/div[1]/div[4]/div[3]/div[1]/div[1]/div[1]/div/div[2]/div/div[2]/div[1]/div/div[2]/div[4]/div/img''',
+                '''//*[@id="layoutPage"]/div[1]/div[4]/div[3]/div[1]/div[1]/div[1]/div/div[2]/div/div[2]/div[1]/div/div[2]/div[5]/div/img'''
+        ]
+        for xpath in xpath_list:
+                choose_photo = driver.find_elements("xpath", xpath)
+                if choose_photo:
+                        click_to_photo(driver, choose_photo)
+                        wait.until(EC.presence_of_element_located(("xpath", '''//*[@id="layoutPage"]/div[1]/div[4]
+                        /div[3]/div[1]/div[1]/div[1]/div/div[2]/div/div[1]/div[1]/div''')))
+                        html2 = driver.page_source
+                        soup2 = BeautifulSoup(html2, 'lxml')
+                        image_list.append(soup2.find('div', {'class': 'jl9'}).img['src'])
+
+        return image_list, property_list
+
+
 # if __name__ == "__main__":
 #         url = 'https://www.wildberries.ru/catalog/153534702/detail.aspx'
 #         wb_master(url)
