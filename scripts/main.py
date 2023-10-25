@@ -24,7 +24,7 @@ path_in_table = 'Канцтовары.xlsx'
 #         print(f'Неизвестная ошибка {E}!')
 #     print(i)
 
-start_ = 1
+start_ = 182
 for i in range(400):
     try:
         main(path_in_table, start_)
