@@ -86,6 +86,64 @@ def yandex_market_master(url):
         return image_list, property_list
 
 
+def wb_master(url):
+        driver = settings()
+        driver.get(url=url)
+
+        wait = WebDriverWait(driver, 20)
+
+        try:
+                driver.find_element("xpath", '''//*[@id="imageContainer"]/div/div/canvas''')
+        except Exception:
+                return 0, 0
+
+        wait.until(EC.presence_of_element_located(("xpath", '''//*[@id="imageContainer"]/div/div/canvas''')))
+
+        html = driver.page_source
+        soup = BeautifulSoup(html, 'lxml')
+
+        specification = soup.find('div', {'class': 'collapsable__content j-description'}).get_text(strip=True)
+
+        if specification != '':
+                specifications = gpt_helper(specification)
+                if specifications is False:
+                        specifications = specification
+        else:
+                html_list_specification = soup.find_all('tr', {'class': 'product-params__row'})
+                for specification in html_list_specification:
+                        html_property_name = specification.find('th', {'class': 'product-params__cell'})
+                        property_name = html_property_name.get_text(strip=True) if html_property_name else 0
+
+                        if 'Вес' not in property_name:
+                                html_property_value = specification.find('td', {'class': 'product-params__cell'})
+                                property_value = html_property_value.get_text(strip=True) if html_property_value else 0
+                                property_ = f"• {property_name} : {property_value} \n"
+                                specification = f'{specification} {property_}'
+                                specifications = specification
+
+
+        image_list = []
+        photo_ = soup.find('div', {'class': 'zoom-image-container'}).img['src']
+        image_list.append(photo_)
+
+        xpath_list = [
+                '''//*[@id="2d2217df-5388-e2c0-29ea-a26d3def1879"]/div/div/div[1]/ul/li[2]/div''',
+                '''//*[@id="2d2217df-5388-e2c0-29ea-a26d3def1879"]/div/div/div[1]/ul/li[3]/div''',
+                '''//*[@id="2d2217df-5388-e2c0-29ea-a26d3def1879"]/div/div/div[1]/ul/li[4]/div'''
+        ]
+        for xpath in xpath_list:
+                choose_photo = driver.find_elements("xpath", xpath)
+                if choose_photo:
+                        click_to_photo(driver, choose_photo)
+                        wait.until(EC.presence_of_element_located(("xpath",
+                                                                   '''//*[@id="imageContainer"]/div/div/canvas''')))
+                        html2 = driver.page_source
+                        soup2 = BeautifulSoup(html2, 'lxml')
+                        image_list.append(soup2.find('div', {'class': 'zoom-image-container'}))
+
+        return image_list, specifications
+
+
 # if __name__ == "__main__":
 #         url = 'https://www.wildberries.ru/catalog/153534702/detail.aspx'
 #         wb_master(url)

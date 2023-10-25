@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 from urllib.parse import quote
 
 from analiz_category import compare_similarity
-from html_master import yandex_market_master #, sima_master, relefopt_master, ozon_master, wb_master
+from html_master import yandex_market_master, wb_master #, sima_master, relefopt_master, ozon_master
 from soup_master import fkniga_scrapper, maguss_scrapper, anytos_scrapper
 
 
@@ -51,13 +51,13 @@ def search_xml(qwery):
             if property_list:
                 return image_list, property_list
 
-        # elif 'wildberries' in link or 'WildBerries' in link:
-        #     try:
-        #         image_list, property_list = wb_master(link)
-        #     except AttributeError:
-        #         image_list, property_list = 0, 0
-        #     if property_list:
-        #         return image_list, property_list
+        elif 'wildberries' in link or 'WildBerries' in link:
+            try:
+                image_list, property_list = wb_master(link)
+            except AttributeError:
+                image_list, property_list = 0, 0
+            if property_list:
+                return image_list, property_list
         #
         # elif ('SIMA-LAND' in link or 'sima-land' in link) and 'otzyv' not in link:
         #     try:
