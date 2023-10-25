@@ -1,7 +1,6 @@
 from bs4 import BeautifulSoup
 from gpt_help import gpt_helper
 
-from seleniumbase import SB
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
@@ -32,14 +31,6 @@ def settings():
                 )
 
         return driver
-
-
-def html_obj(url):
-    with SB(headed=True) as driver:
-        driver.open(url)
-        page_html1 = driver.get_page_source()
-
-        return page_html1
 
 
 def click_to_photo(driver, choose_photo):
