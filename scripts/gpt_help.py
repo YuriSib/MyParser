@@ -8,7 +8,7 @@ def gpt_helper(text_):
     for i in range(2):
         try:
             response_ = g4f.ChatCompletion.create(
-                model=g4f.models.gpt_4,
+                model="gpt-3.5-turbo",
                 messages=[{"role": "user", "content": f"{text_} Переработай этот текст таким образом, чтобы остались "
                                                       f"только технические характеристики товара в строгом соответствии"
                                                       f" с форматом: • Характеристика товара : её значение \n. Сделать"
@@ -29,4 +29,5 @@ def gpt_helper(text_):
 if __name__ == "__main__":
     text = '''Набор двухсторонних скетчмаркеров Alingar,120 цветов, пулевидный/клиновидный 1-6 мм, спиртовая основа, 
     сумка-чехол с ПВХ каркас-ячейками'''
-    response = gpt_helper
+    response = gpt_helper(text)
+    print(text)
