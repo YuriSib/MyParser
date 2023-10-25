@@ -2,7 +2,7 @@ import requests
 from fake_useragent import UserAgent
 from bs4 import BeautifulSoup
 
-from gpt_help import gpt_helper
+#from gpt_help import gpt_helper
 
 
 # def for_vi(html):
@@ -111,8 +111,8 @@ def fkniga_scrapper(url_):
     photo_list = ['https://fkniga.ru/' + photo.select_one('.MagicZoom')['href'] for photo in html_photo_list]
 
     dirty_specification = soup.find('div', {'class': 'section section--descriptionArticle'}).get_text(strip=True)
-    dirty_specification = dirty_specification.strip('Описание товара')
-    specification_list = gpt_helper(dirty_specification)
+    specification_list = dirty_specification.strip('Описание товара')
+    # specification_list = gpt_helper(dirty_specification)
 
     return photo_list, specification_list
 
@@ -142,8 +142,8 @@ def maguss_scrapper(url_):
                 property_ = f"• {property_name} : {property_value} \n"
                 specification_ = f'{specification_} {property_}'
     else:
-        html_specification_ = soup.find('div', {'class': 'content detail-text-wrap'})
-        specification_ = gpt_helper(html_specification_.get_text(strip=True)) if html_specification_ else specification_ is False
+        specification_ = soup.find('div', {'class': 'content detail-text-wrap'})
+        # specification_ = gpt_helper(html_specification_.get_text(strip=True)) if html_specification_ else specification_ is False
 
     return photo_list, specification_
 
@@ -156,13 +156,13 @@ def anytos_scrapper(url_):
 
     specifications = soup.find('div', {'class': 's7sbp--marketplace--catalog-element-detail-product--tabs--body--item '
                                                'active'}).get_text(strip=True)
-    specification_list = gpt_helper(specifications)
-    if '!DOCTYPE html' in specification_list:
-        specification_list = gpt_helper(specifications)
-    if '!DOCTYPE html' in specification_list:
-        specification_list = specifications
+    # specification_list = gpt_helper(specifications)
+    # if '!DOCTYPE html' in specification_list:
+    #     specification_list = gpt_helper(specifications)
+    # if '!DOCTYPE html' in specification_list:
+    #     specification_list = specifications
 
-    return photo_, specification_list
+    return photo_, specifications
 
 
 # def wb_master(url_):

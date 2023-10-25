@@ -22,9 +22,9 @@ def search_xml(qwery):
 
     name_and_index_list = [(item, list_name.index(item[0])) for item in filtered_list_name]
     filtered_link_list = [list_link[item[1]] for item in name_and_index_list]
-    sorted_link_list = [item for item in filtered_link_list if 'yandex' not in item and 'OZON' not in item] + \
-                       [item for item in filtered_link_list if 'yandex' in item] + \
-                       [item for item in filtered_link_list if 'OZON' in item]
+    sorted_link_list = [item for item in filtered_link_list if 'maguss' not in item and 'anytos' not in item] + \
+                       [item for item in filtered_link_list if 'maguss' in item] + \
+                       [item for item in filtered_link_list if 'anytos' in item]
 
     for link in sorted_link_list:
         if 'maguss' in link:
@@ -59,21 +59,21 @@ def search_xml(qwery):
         #     if property_list:
         #         return image_list, property_list
         #
-        # elif ('SIMA-LAND' in link or 'sima-land' in link) and 'otzyv' not in link:
-        #     try:
-        #         image_list, property_list = sima_master(link)
-        #     except AttributeError:
-        #         image_list, property_list = 0, 0
-        #     if property_list:
-        #         return image_list, property_list
-        #
-        elif 'relefopt' in link:
+        elif ('SIMA-LAND' in link or 'sima-land' in link) and 'otzyv' not in link:
             try:
-                image_list, property_list = relefopt_master(link)
+                image_list, property_list = sima_master(link)
             except AttributeError:
                 image_list, property_list = 0, 0
             if property_list:
                 return image_list, property_list
+        #
+        # elif 'relefopt' in link:
+        #     try:
+        #         image_list, property_list = relefopt_master(link)
+        #     except AttributeError:
+        #         image_list, property_list = 0, 0
+        #     if property_list:
+        #         return image_list, property_list
         #
         # elif ('ozon' in link or 'OZON' in link) and 'category' not in link:
         #     try:
