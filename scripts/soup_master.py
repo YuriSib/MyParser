@@ -172,12 +172,11 @@ def anytos_scrapper(url_):
 #     photo_ = html_photo.img['src']
 #
 #     specifications = soup.find('div', {'class': 'collapsable__content j-description'}).get_text(strip=True)
-#     specification_list = gpt_helper(specifications)
 #
-#     return photo_, specification_list
+#     return photo_, specifications
 
 
 if __name__ == "__main__":
-    url = 'https://www.ozon.ru/product/avtovizitka-parkovochnaya-kartochka-258910776/?avtc=1&avte=2&avts=1697212649'
-    response = requests.get(url)
+    url = 'https://www.wildberries.ru/catalog/180450715/detail.aspx'
+    response = wb_master(url)
     print(response)

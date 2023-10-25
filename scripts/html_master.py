@@ -102,17 +102,7 @@ def wb_master(url):
         html = driver.page_source
         soup = BeautifulSoup(html, 'lxml')
 
-        html_list_specification = soup.find_all('tr', {'class': 'product-params__row'})
-        for specification in html_list_specification:
-                html_property_name = specification.find('th', {'class': 'product-params__cell'})
-                property_name = html_property_name.get_text(strip=True) if html_property_name else 0
-                if 'Вес' not in property_name:
-                        html_property_value = specification.find('td', {'class': 'product-params__cell'})
-                        property_value = html_property_value.get_text(strip=True) if html_property_value else 0
-                        property_ = f"• {property_name} : {property_value} \n"
-                        specification = f'{specification} {property_}'
-                        specifications = specification
-
+        specification = soup.find('div', {'class': 'collapsable__content j-description'}).get_text(strip=True)
 
         image_list = []
         photo_ = soup.find('div', {'class': 'zoom-image-container'}).img['src']
@@ -133,7 +123,7 @@ def wb_master(url):
                         soup2 = BeautifulSoup(html2, 'lxml')
                         image_list.append(soup2.find('div', {'class': 'zoom-image-container'}))
 
-        return image_list, specifications
+        return image_list, specification
 
 
 def ozon_master(url):
@@ -179,6 +169,66 @@ def ozon_master(url):
                         html2 = driver.page_source
                         soup2 = BeautifulSoup(html2, 'lxml')
                         image_list.append(soup2.find('div', {'class': 'jl9'}).img['src'])
+
+        return image_list, property_list
+
+
+def relefopt_master(url):
+        driver = settings()
+        driver.get(url=url)
+
+        wait = WebDriverWait(driver, 20)
+        wait.until(EC.presence_of_element_located((By.TAG_NAME, "body")))
+
+        html = driver.page_source
+        soup = BeautifulSoup(html, 'lxml')
+
+        html_list_specification = soup.find_all('a', {'class': 'src-components-Product-PropertyTable--trProperty '
+                                                                'src-components-Product-PropertyTable--trProductTabs'})
+
+        property_list = None
+
+        for dirty_specification in html_list_specification:
+                property_name = dirty_specification.find('div', {'class': 'src-components-Product-PropertyTable--'
+                                'propertyItem src-components-Product-PropertyTable--overflow'}).get_text(strip=True)
+                try:
+                        property_value = dirty_specification.find('span', {'class': 'src-components-Product-'
+                                                'PropertyTable--filterLink src-components-'
+                                                'Product-Property''Table--filterLinkTitle'}).get_text(strip=True)
+                except AttributeError:
+                        property_value = dirty_specification.find('span', {'class': 'src-components-Product-'
+                                                                'PropertyTable--filterLink'}).get_text(strip=True)
+                finally:
+                        property_ = f"• {property_name} : {property_value} \n"
+                        property_list = f'{property_list} {property_}'
+
+        image_list = []
+        dirty_photo_list = soup.find('div', {'class': 'src-components-ProductPage-ProductOne--productsOneWrapImage '
+                                                      'src-components-ProductPage-ProductOne--productsOneWrapImageMain'})
+        photo = dirty_photo_list.find('div', {'class': 'src-components-ProductPage-ProductOne--image'}).img['src']
+
+        image_list.append(photo)
+
+        xpath_list = [
+                '''//*[@id="content"]/div/main/div/div[1]/div/span/div[1]/div/div/div[3]/div/div[2]/div[1]/div/div[2]
+                /div/div/div/div/div[2]/div/div/div/img''',
+                '''//*[@id="content"]/div/main/div/div[1]/div/span/div[1]/div/div/div[3]/div/div[2]/div[1]/div/div[2]
+                /div/div/div/div/div[3]/div/div/div/img''',
+                '''//*[@id="content"]/div/main/div/div[1]/div/span/div[1]/div/div/div[3]/div/div[2]/div[1]/div/div[2]
+                /div/div/div/div/div[4]/div/div/div/img'''
+        ]
+        for xpath in xpath_list:
+                choose_photo = driver.find_elements("xpath", xpath)
+                if choose_photo:
+                        click_to_photo(driver, choose_photo)
+                        html2 = driver.page_source
+                        soup2 = BeautifulSoup(html2, 'lxml')
+                        dirty_photo_list = soup2.find('div', {
+                                'class': 'src-components-ProductPage-ProductOne--productsOneWrapImage '
+                                         'src-components-ProductPage-ProductOne--productsOneWrapImageMain'})
+                        photo = dirty_photo_list.find('div', {'class': 'src-components-ProductPage-ProductOne--'
+                                                                       'image'}).img['src']
+                        image_list.append(photo)
 
         return image_list, property_list
 

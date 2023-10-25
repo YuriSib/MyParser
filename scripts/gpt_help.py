@@ -31,3 +31,5 @@
 #     сумка-чехол с ПВХ каркас-ячейками'''
 #     response = gpt_helper(text)
 #     print(text)
+
+
