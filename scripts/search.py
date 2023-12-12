@@ -5,10 +5,21 @@ from urllib.parse import quote
 from analiz_category import compare_similarity
 from html_master import yandex_market_master, wb_master, ozon_master, relefopt_master #, sima_master
 from soup_master import fkniga_scrapper, maguss_scrapper, anytos_scrapper
+from html_master import settings
 
 
 def search_xml(qwery):
     product = quote(qwery)
+    url = f'https://yandex.ru/search/?text={product}'
+
+    driver = settings()
+    driver.get(url=url)
+
+    html = driver.page_source
+    soup = BeautifulSoup(html, 'lxml')
+
+    dirty_list_link =
+
     url = f'https://xmlstock.com/yandex/xml/?user=11362&key=2a81ea2bf46144411cc5e8c148f5fcfa&query=' \
           f'{product}&groupby=attr%3D%22%22.mode%3Dflat.groups-on-page%3D40.docs-in-group%3D1'
     response = requests.get(url)
@@ -92,5 +103,7 @@ def search_xml(qwery):
                 image_list, property_list = 0, 0
             if property_list:
                 return image_list, property_list
+
+
 
 

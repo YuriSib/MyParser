@@ -6,7 +6,7 @@ from collections import Counter
 import openpyxl
 
 
-def compare_similarity(text, text_list, threshold=60):
+def compare_similarity(text, text_list, threshold=30):
     similar_texts = []
     idx = 0
     for item in text_list:
@@ -46,15 +46,18 @@ def import_xl(table):
         print(cnt)
         cnt += 1
 
-        if article:
-            response = str(article) + ' ' + name
-            links = ' '.join(search_xml(response))
-            sheet.cell(row=row, column=3).value = links if links else 'не найдено'
-        else:
-            links = ' '.join(search_xml(name))
-            sheet.cell(row=row, column=3).value = links if links else 'не найдено'
+        try:
+            if article:
+                response = str(article) + ' ' + name
+                links = ' '.join(search_xml(response))
+                sheet.cell(row=row, column=3).value = links if links else 'не найдено'
+            else:
+                links = ' '.join(search_xml(name))
+                sheet.cell(row=row, column=3).value = links if links else 'не найдено'
 
-        catalog.save(table)
+            catalog.save(table)
+        except TypeError:
+            continue
 
 
 def count_link(table):
@@ -63,7 +66,7 @@ def count_link(table):
     cnt = 1
 
     list_links = []
-    for row in range(1, 2020):
+    for row in range(1, 5):
         print(cnt)
         cnt += 1
         str_links = sheet[row][2].value
@@ -75,11 +78,12 @@ def count_link(table):
 
     with open('output.txt', 'w', encoding='utf-8') as file:
         for value, count in counts.items():
-            if count > 150:
+            if count > 100:
                 file.write(f'{value} повторяется {count} раз(а)\n')
 
 
 if __name__ == '__main__':
-    count_link('Для анализа канцтоваров.xlsx')
+    import_xl('Крепеж.xlsx')
+    # count_link('Крепеж.xlsx')
 
 

@@ -1,5 +1,4 @@
 from bs4 import BeautifulSoup
-#from gpt_help import gpt_helper
 
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
